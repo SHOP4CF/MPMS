@@ -2,7 +2,7 @@
 # Manufacturing Process Management System (MPMS)
 
 
-## Purpose
+### Purpose
 
 MPMS provides end-to-end (i.e., from order reception until product delivery) manufacturing process management and orchestration of activities by:
 
@@ -10,7 +10,7 @@ MPMS provides end-to-end (i.e., from order reception until product delivery) man
 - executing in automated way the processes by assigning activities to agents
 - providing process monitoring for a complete status overview of the manufacturing processes
 
-## Overview
+# MPMS for SHOP4CF
 
 A Process Application for a Manufacturing Process Management System for [SHOP4CF](https://www.shop4cf.eu/) project with [Camunda BPM](https://camunda.com/).
 Developed by [Information Systems research group](https://www.tue.nl/en/research/research-groups/information-systems-ieis/) of [TUe](https://www.tue.nl/en/).
