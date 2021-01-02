@@ -1,0 +1,33 @@
+<form class="form-horizontal">
+
+    <div class="control-group">
+        <label class="control-label">WSA S/N</label>
+        <div class="controls">
+            <input class="form-control" cam-variable-type="String" cam-variable-name="wsaSN" name ="wsaSN" readonly="readonly"/>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <img src="https://surfdrive.surf.nl/files/index.php/s/Qh9fgbczoTvXezt/download">
+    </div>
+
+    <div class="control-group">
+        <img src="https://surfdrive.surf.nl/files/index.php/s/uhseooqrnK5xD8p/download">
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Evaluation</label>
+        <div class="controls">
+            <select cam-variable-name="defect_evaluation"
+                    cam-variable-type="String">
+                <option>OK</option>
+                <option>Defected</option>
+                <option>Rework</option>
+            </select>
+        </div>
+    </div>
+
+    <script cam-script type="text/form-script">
+    // custom JavaScript goes here
+    </script>
+</form>

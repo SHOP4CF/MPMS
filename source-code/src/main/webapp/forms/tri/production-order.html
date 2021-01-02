@@ -1,0 +1,86 @@
+<form class="form-horizontal" role="form">
+    <div class="control-group">
+        <label class="control-label">Available Production Orders</label>
+        <div class="controls">
+            <select id=dropdownItemsAvailPOs cam-variable-name="selected_poId" cam-variable-type="Long" cam-choices="available_productionorders"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Taak Kaart</label>
+        <div class="controls">
+            <img id="poTaskCardField">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Production Order</label>
+        <div class="controls">
+            <input id="poNoField" type="text" class="form-control" cam-variable-name="selected_poNo" cam-variable-type="String" value="" readonly="readonly"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Product Description</label>
+        <div class="controls">
+            <input id="poProductDescrField" type="text" class="form-control" cam-variable-name="selected_poProductDescr" cam-variable-type="String" value="" readonly="readonly"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Product Length</label>
+        <div class="controls">
+            <input id="poProductLengthField" class="form-control" value="" ng-model="productionorders.poproductLength" readonly="readonly"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Linked VO/PO</label>
+        <div class="controls">
+            <input id="poLinkedVOPOField" class="form-control" value="" ng-model="productionorders.polinkedVOPO" cam-variable-name="selected_poLinkedPOVO" cam-variable-type="String" readonly="readonly"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Customer</label>
+        <div class="controls">
+            <input id="poCustomerField" class="form-control" value="" ng-model="productionorders.pocustomer" cam-variable-name="selected_poCustomer" cam-variable-type="String" readonly="readonly"/>
+        </div>
+    </div>
+
+
+    <script cam-script type="text/form-script">
+    var variableManager = camForm.variableManager;
+    var poProductDescrField = $('#poProductDescrField', camForm.formElement);
+    var poProductLengthField = $('#poProductLengthField', camForm.formElement);
+    var poLinkedVOPOField = $('#poLinkedVOPOField', camForm.formElement);
+    var poCustomerField = $('#poCustomerField', camForm.formElement);
+    var poTaskCardField = $('#poTaskCardField', camForm.formElement);
+
+    camForm.on('form-loaded', function() {
+      // fetch the variable 'productionorders'
+      variableManager.fetchVariable('productionorders');
+    });
+
+    camForm.on('variables-fetched', function() {
+        <!--// this callback is executed *after* the variables have been fetched from the server-->
+        $scope.productionorders = variableManager.variable('productionorders').value;
+
+    });
+
+
+    var select = document.getElementById("dropdownItemsAvailPOs");
+    select.onchange = function(){
+            var obj = $scope.productionorders;
+            for (var i = 0; i < obj.length; i++) {
+            if (obj[i]["poid"] == select.options[select.selectedIndex].value) {
+                document.getElementById("poProductDescrField").value = obj[i]["poproductDescr"];
+                document.getElementById("poProductLengthField").value = obj[i]["poproductLength"];
+                document.getElementById("poLinkedVOPOField").value = obj[i]["polinkedVOPO"];
+                document.getElementById("poCustomerField").value = obj[i]["pocustomer"];
+                document.getElementById("poTaskCardField").src = obj[i]["potaskCard"];
+            }
+        }
+
+        var selectedString = select.options[select.selectedIndex].innerHTML;
+        document.getElementById("poNoField").value = selectedString;
+     }
+
+
+</script>
+
+</form>

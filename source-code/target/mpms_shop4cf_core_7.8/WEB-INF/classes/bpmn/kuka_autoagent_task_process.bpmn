@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.15.1">
+  <bpmn:collaboration id="Collaboration_1vihqyg">
+    <bpmn:participant id="KUKA_AutoAgent_Task_" name="KUKA AutoAgent Task" processRef="KUKA_AutoAgent_Task_Process" />
+  </bpmn:collaboration>
+  <bpmn:process id="KUKA_AutoAgent_Task_Process" name="KUKA AutoAgent Task" isExecutable="true">
+    <bpmn:userTask id="UserTask_AutoagentTask" name="#{parentTaskName}" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="productNo" label="productNo" type="string" defaultValue="#{productNo}">
+            <camunda:validation>
+              <camunda:constraint name="readonly" config="true" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="task_status" label="Task Status" type="enum" defaultValue="assigned">
+            <camunda:value id="assigned" name="Assigned" />
+            <camunda:value id="succeeded" name="Succeeded" />
+            <camunda:value id="cancelled" name="Failed" />
+            <camunda:value id="retry" name="Retry" />
+          </camunda:formField>
+        </camunda:formData>
+        <camunda:taskListener delegateExpression="#{sendAutoAgentTaskInfoListener}" event="create" />
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="javascript">execution.setVariable("task_status", "assigned");</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_133klv2</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0jevcya</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="EndEvent_TaskCompleted" name="Task completed">
+      <bpmn:incoming>SequenceFlow_0n2w4c1</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_TaskFailed" name="Task failed">
+      <bpmn:incoming>SequenceFlow_1arxf4n</bpmn:incoming>
+      <bpmn:errorEventDefinition errorRef="Error_ARFailed" />
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1j4gpwg" name="Check &#10;task status" default="SequenceFlow_0n2w4c1">
+      <bpmn:incoming>SequenceFlow_0jevcya</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0n2w4c1</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1arxf4n</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1gnzi10</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1ckjw80" sourceRef="StartEvent_TaskAssigned" targetRef="ExclusiveGateway_1ivd82k" />
+    <bpmn:sequenceFlow id="SequenceFlow_0jevcya" sourceRef="UserTask_AutoagentTask" targetRef="ExclusiveGateway_1j4gpwg" />
+    <bpmn:sequenceFlow id="SequenceFlow_0n2w4c1" name="Succeeded" sourceRef="ExclusiveGateway_1j4gpwg" targetRef="EndEvent_TaskCompleted" />
+    <bpmn:sequenceFlow id="SequenceFlow_1arxf4n" name="Failed" sourceRef="ExclusiveGateway_1j4gpwg" targetRef="EndEvent_TaskFailed">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{task_status=='cancelled'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:startEvent id="StartEvent_TaskAssigned" name="Task to be assigned">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="parentTaskName" label="parentTaskName" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_1ckjw80</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1ivd82k">
+      <bpmn:incoming>SequenceFlow_1ckjw80</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1gnzi10</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_133klv2</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_133klv2" sourceRef="ExclusiveGateway_1ivd82k" targetRef="UserTask_AutoagentTask" />
+    <bpmn:sequenceFlow id="SequenceFlow_1gnzi10" name="Retry" sourceRef="ExclusiveGateway_1j4gpwg" targetRef="ExclusiveGateway_1ivd82k">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{task_status=='retry'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmn:error id="Error_ARFailed" name="ar_failed" errorCode="ar_failed_code" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1vihqyg">
+      <bpmndi:BPMNShape id="Participant_1hpgqz3_di" bpmnElement="KUKA_AutoAgent_Task_">
+        <dc:Bounds x="11" y="0" width="606" height="252" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_11raerl_di" bpmnElement="StartEvent_TaskAssigned">
+        <dc:Bounds x="67" y="88" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="59" y="129" width="51" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_07tov81_di" bpmnElement="UserTask_AutoagentTask">
+        <dc:Bounds x="230" y="66" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0i2shvv_di" bpmnElement="EndEvent_TaskCompleted">
+        <dc:Bounds x="526" y="88" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="507" y="128" width="77" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1k3leso_di" bpmnElement="EndEvent_TaskFailed">
+        <dc:Bounds x="526" y="178" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="520" y="218" width="52" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1j4gpwg_di" bpmnElement="ExclusiveGateway_1j4gpwg" isMarkerVisible="true">
+        <dc:Bounds x="372" y="81" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="337" y="59" width="52" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1ckjw80_di" bpmnElement="SequenceFlow_1ckjw80">
+        <di:waypoint x="103" y="106" />
+        <di:waypoint x="141" y="106" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="156" y="85" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0jevcya_di" bpmnElement="SequenceFlow_0jevcya">
+        <di:waypoint x="330" y="106" />
+        <di:waypoint x="372" y="106" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="306" y="85" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0n2w4c1_di" bpmnElement="SequenceFlow_0n2w4c1">
+        <di:waypoint x="422" y="106" />
+        <di:waypoint x="526" y="106" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="435" y="77" width="55" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1arxf4n_di" bpmnElement="SequenceFlow_1arxf4n">
+        <di:waypoint x="397" y="131" />
+        <di:waypoint x="397" y="196" />
+        <di:waypoint x="526" y="196" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="407" y="145" width="31" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1ivd82k_di" bpmnElement="ExclusiveGateway_1ivd82k" isMarkerVisible="true">
+        <dc:Bounds x="141" y="81" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_133klv2_di" bpmnElement="SequenceFlow_133klv2">
+        <di:waypoint x="191" y="106" />
+        <di:waypoint x="230" y="106" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1gnzi10_di" bpmnElement="SequenceFlow_1gnzi10">
+        <di:waypoint x="397" y="81" />
+        <di:waypoint x="397" y="26" />
+        <di:waypoint x="166" y="26" />
+        <di:waypoint x="166" y="81" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="407" y="50" width="27" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,1 @@
+drop table WSABatchEntity if exists;

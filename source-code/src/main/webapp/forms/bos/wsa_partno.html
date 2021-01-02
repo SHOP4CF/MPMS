@@ -1,0 +1,82 @@
+<form class="form-horizontal" role="form">
+    <div class="control-group">
+        <label class="control-label">Available Part NO's</label>
+        <div class="controls">
+            <!--<input class="form-control" cam-variable-type="Integer"  cam-variable-name="partnocount" name ="partnocount" value="40" readonly="readonly"/>-->
+            <select id=dropdownItemsAvailPartNOs cam-variable-name="selected_pnId" cam-variable-type="String" cam-choices="available_partnumbers"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Part No</label>
+        <div class="controls">
+            <input id="partNoField" type="text" class="form-control" cam-variable-name="selected_partNo" cam-variable-type="String" value="" readonly="readonly"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Part No Type</label>
+        <div class="controls">
+            <input id="partNoTypeField" type="text" class="form-control" cam-variable-name="selected_partNoType" cam-variable-type="String" value="" readonly="readonly"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Part No Quantity</label>
+        <div class="controls">
+            <input id="partNoQuantityField" class="form-control" value="" ng-model="partnumbers.partNoQuantity" readonly="readonly"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Part No Checkpoints per WSA</label>
+        <div class="controls">
+            <input id="partNoCheckpointsField" class="form-control" value="" ng-model="partnumbers.partNoCheckpoints" cam-variable-name="selected_partNoCheckpoints" cam-variable-type="String" readonly="readonly"/>
+        </div>
+    </div>
+
+    <!--<span>{{(partnumbers | filter: {pnId:1})[0].pnQuantity}}</span>-->
+
+    <script cam-script type="text/form-script">
+    var variableManager = camForm.variableManager;
+    var partNoQuantityField = $('#partNoQuantityField', camForm.formElement);
+    var partNoCheckpointsField = $('#partNoCheckpointsField', camForm.formElement);
+
+    camForm.on('form-loaded', function() {
+      // fetch the variable 'partnumbers'
+      variableManager.fetchVariable('partnumbers');
+    });
+
+    camForm.on('variables-fetched', function() {
+        <!--// this callback is executed *after* the variables have been fetched from the server-->
+        <!--var variableValue = variableManager.variableValue('boxcapacity');-->
+       <!--//$('#boxcapacityField', camForm.formElement).textContent(variableValue);-->
+        <!--boxcapacityField.val(variableValue);-->
+
+        $scope.partnumbers = variableManager.variable('partnumbers').value;
+        <!--partNoQuantityField.val($filter('filter')(variableManager.variable('partnumbers'), {partNoId:2})[0].partNoQuantity);-->
+
+    });
+
+
+    var select = document.getElementById("dropdownItemsAvailPartNOs");
+    select.onchange = function(){
+            var obj = $scope.partnumbers;
+            for (var i = 0; i < obj.length; i++) {
+            if (obj[i]["partNoId"] == select.options[select.selectedIndex].value) {
+                document.getElementById("partNoTypeField").value = obj[i]["partNoType"];
+                document.getElementById("partNoQuantityField").value = obj[i]["partNoQuantity"];
+                document.getElementById("partNoCheckpointsField").value = obj[i]["partNoCheckpoints"];
+            }
+        }
+
+        var selectedString = select.options[select.selectedIndex].innerHTML;
+        document.getElementById("partNoField").value = selectedString;
+     }
+
+    <!--function leaveChange(control)-->
+    <!--{-->
+        <!--var msg = control.options[control.selectedIndex].innerHTML;-->
+        <!--document.getElementById("partnocount").value = msg;-->
+    <!--};-->
+
+
+</script>
+
+</form>

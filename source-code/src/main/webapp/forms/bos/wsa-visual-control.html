@@ -1,0 +1,48 @@
+<form class="form-horizontal">
+    <div class="control-group">
+        <img src="http://dsg.files.app.content.prod.s3.amazonaws.com/gereports/wp-content/uploads/2015/03/24190300/tumblr_inline_nlqd41Qfwn1qzgziy.gif" style="width:128px;height:128px;">
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">WSA SN</label>
+        <div class="controls">
+            <input class="form-control" cam-variable-type="String" cam-variable-name="wsaSN" name ="wsaSN" readonly="readonly"/>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Script</label>
+        <div class="controls">
+            <textarea rows="11" cols="10" class="form-control" cam-variable-type="String" cam-variable-name="script" name ="script" readonly="readonly" style="white-space:pre-wrap">start_pos=get_forward_kin()
+                 length=$length
+                 width=$width
+                Loop
+                   MoveL
+                     corner_1=pose_trans(start_pos,p[width/1000.0,0.0,])
+                     corner_1
+                   MoveL
+                     corner_2=pose_trans(start_pos,p[width/1000.0,length/1000.0,0.0,])
+                     corner_2
+                Defect=?
+            </textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Defect</label>
+        <div class="controls">
+            <input class="form-control" type="checkbox" cam-variable-type="Boolean"  cam-variable-name="defect" name ="defect" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Defects</label>
+        <div class="controls">
+            <input class="form-control" cam-variable-type="String"  cam-variable-name="defects" name ="defects" value=""/>
+        </div>
+    </div>
+
+    <script cam-script type="text/form-script">
+    // custom JavaScript goes here
+    </script>
+</form>

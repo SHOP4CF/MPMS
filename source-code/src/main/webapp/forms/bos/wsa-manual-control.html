@@ -1,0 +1,25 @@
+<form class="form-horizontal">
+
+    <div class="control-group">
+        <label class="control-label">WSA SN</label>
+        <div class="controls">
+            <input class="form-control" cam-variable-type="String" cam-variable-name="wsaSN" name ="wsaSN" readonly="readonly"/>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Manual control</label>
+        <div class="controls">
+            <select cam-variable-name="manualcontrolresult"
+                    cam-variable-type="String">
+                <option>OK</option>
+                <option>Defected</option>
+                <option>Rework</option>
+            </select>
+        </div>
+    </div>
+
+    <script cam-script type="text/form-script">
+    // custom JavaScript goes here
+    </script>
+</form>
